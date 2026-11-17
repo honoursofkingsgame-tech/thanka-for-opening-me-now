@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#21140e">
+  <title>A Little Birthday Magic</title>
+  <style>
+    :root {
+      --paper: #f5e9c8;
+      --ink: #5b1017;
+      --brown: #754a2b;
+      --gold: #c49a55;
+      --dark: #21140e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 18px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at center, rgba(120,74,38,.22), transparent 62%),
+        #21140e;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+    .frame {
+      position: relative;
+      width: min(100%, 520px);
+      min-height: min(850px, calc(100vh - 36px));
+      padding: 22px;
+      border: 10px solid #80542f;
+      border-radius: 30px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.26), transparent 22%),
+        radial-gradient(ellipse at center, #fbf1d7 0%, var(--paper) 72%, #ead9ad 100%);
+      box-shadow: 0 0 0 3px #c49a55, 0 18px 55px rgba(0,0,0,.5), inset 0 0 35px rgba(112,70,32,.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .frame::before, .frame::after {
+      content: "";
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      background: rgba(112,78,47,.22);
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+    .frame::before { top: -48px; left: -48px; }
+    .frame::after { bottom: -48px; right: -48px; }
+    .screen {
+      display: none;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: appear .35s ease;
+    }
+    .screen.active { display: flex; }
+    @keyframes appear { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+    h1, h2, p { margin-top: 0; }
+    h1 {
+      margin: 38px 0 16px;
+      color: #650d17;
+      font-size: clamp(2rem, 7vw, 2.7rem);
+      line-height: 1.28;
+      font-weight: 600;
+    }
+    h2 {
+      color: #650d17;
+      font-size: clamp(1.65rem, 6vw, 2.15rem);
+      margin: 18px 0;
+    }
+    p { font-size: 1.15rem; line-height: 1.6; }
+    .hero-image {
+      width: min(74%, 245px);
+      height: 235px;
+      object-fit: contain;
+      margin: 18px auto 22px;
+      display: block;
+    }
+    .small-image {
+      width: min(68%, 220px);
+      height: 210px;
+      object-fit: contain;
+      margin: 10px auto 18px;
+    }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin: auto 0 18px;
+      padding-top: 18px;
+    }
+    button {
+      border: 2px solid #3b2922;
+      border-radius: 999px;
+      padding: 13px 28px;
+      min-width: 128px;
+      color: #fff8e9;
+      background: #79080d;
+      font: bold 1.15rem Georgia, serif;
+      box-shadow: 0 5px 10px rgba(0,0,0,.22);
+      cursor: pointer;
+    }
+    button.secondary { background: #555; }
+    button:hover { filter: brightness(1.12); }
+    button:focus-visible { outline: 3px solid #c49a55; outline-offset: 3px; }
+    .menu-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 25px 0;
+    }
+    .menu-grid button { min-width: 0; padding: 17px 10px; }
+    .back {
+      align-self: flex-start;
+      min-width: auto;
+      padding: 9px 18px;
+      font-size: 1rem;
+      margin-top: auto;
+    }
+    .photo-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 8px 0 18px;
+    }
+    .photo-grid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border: 5px solid #fff8e8;
+      outline: 1px solid #b48a4d;
+      border-radius: 5px;
+      box-shadow: 0 4px 9px rgba(0,0,0,.18);
+      background: rgba(255,255,255,.25);
+    }
+    .note-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin: 4px 0 18px;
+    }
+    .note-tabs button {
+      min-width: 0;
+      padding: 9px 14px;
+      font-size: .98rem;
+    }
+    .note-card {
+      width: 100%;
+      min-height: 190px;
+      padding: 25px 20px;
+      border: 1px solid #c49a55;
+      border-radius: 12px;
+      background: rgba(255,255,255,.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .note-card p { font-size: 1.22rem; }
+    .music-card, .wish-card {
+      width: 100%;
+      padding: 24px 18px;
+      margin: 16px 0;
+      border: 1px solid #c49a55;
+      border-radius: 14px;
+      background: rgba(255,255,255,.35);
+    }
+    audio { width: 100%; margin-top: 12px; }
+    .hint { font-size: .92rem; color: #765b3d; }
+    @media (max-height: 700px) {
+      .frame { min-height: calc(100vh - 24px); padding: 16px; }
+      h1 { margin-top: 16px; }
+      .hero-image { height: 170px; margin: 8px auto; }
+      .small-image { height: 155px; }
+      .photo-grid img { height: 115px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <!-- 1. Welcome -->
+    <section class="screen active" id="welcome">
+      <h1>Hey! I made something for you<br>do you wanna see it?</h1>
+      <img class="hero-image" src="harry-opening.jpg" alt="Harry Potter holding his wand">
+      <div class="button-row">
+        <button onclick="showScreen('happy')">Yes</button>
+        <button class="secondary" onclick="showScreen('angry')">No</button>
+      </div>
+    </section>
+
+    <!-- 2. Playful no screen -->
+    <section class="screen" id="angry">
+      <h1>SERIOUSLY!?<br>How dare you! Hmph!</h1>
+      <img class="small-image" src="hmph.png" alt="Harry Potter looking annoyed">
+      <div class="button-row">
+        <button onclick="showScreen('welcome')">Go back</button>
+        <button class="secondary" onclick="showScreen('happy')">Okay, yes!</button>
+      </div>
+    </section>
+
+    <!-- 3. Happy screen -->
+    <section class="screen" id="happy">
+      <h1>That's a good Gurlll 🌻</h1>
+      <img class="small-image" src="hedwig.png" alt="Harry Potter with Hedwig">
+      <div class="button-row">
+        <button onclick="showScreen('home')">Continue</button>
+      </div>
+    </section>
+
+    <!-- 4. Home menu -->
+    <section class="screen" id="home">
+      <h1>Welcome to your little<br>world of magic ✨</h1>
+      <p>A little collection made just for your birthday.</p>
+      <div class="menu-grid">
+        <button onclick="showScreen('memories')">Memories 📸</button>
+        <button onclick="showScreen('notes')">Notes 💌</button>
+        <button onclick="showScreen('music')">Music 🎵</button>
+        <button onclick="showScreen('wishes')">Wishes 🎂</button>
+      </div>
+    </section>
+
+    <!-- 5. Memories -->
+    <section class="screen" id="memories">
+      <h2>Our Memories 📸</h2>
+      <div class="photo-grid">
+        <img src="memory1.jpg" alt="Memory photo 1">
+        <img src="memory2.jpg" alt="Memory photo 2">
+        <img src="memory3.jpg" alt="Memory photo 3">
+        <img src="memory4.jpg" alt="Memory photo 4">
+        <img src="memory5.jpg" alt="Memory photo 5">
+      </div>
+      <button class="back" onclick="showScreen('home')">← Back</button>
+    </section>
+
+    <!-- 6. Notes -->
+    <section class="screen" id="notes">
+      <h2>Little Promises 💌</h2>
+      <div class="note-tabs">
+        <button onclick="showNote(0)">Promise 1</button>
+        <button onclick="showNote(1)">Promise 2</button>
+        <button onclick="showNote(2)">Promise 3</button>
+      </div>
+      <div class="note-card"><p id="noteText">promise one I am always here for you never leaving you</p></div>
+      <button class="back" onclick="showScreen('home')">← Back</button>
+    </section>
+
+    <!-- 7. Music -->
+    <section class="screen" id="music">
+      <h2>A Song for You 🎵</h2>
+      <div class="music-card">
+        <p><strong>Salvatore</strong><br><span class="hint">Lana Del Rey</span></p>
+        <audio controls preload="metadata">
+          <source src="salvatore.mp3" type="audio/mpeg">
+          Your browser does not support audio playback.
+        </audio>
+        <p class="hint">Tap play to listen.</p>
+      </div>
+      <button class="back" onclick="showScreen('home')">← Back</button>
+    </section>
+
+    <!-- 8. Wishes -->
+    <section class="screen" id="wishes">
+      <h2>Happy Birthday! 🎂</h2>
+      <div class="wish-card">
+        <p>May your day be filled with happiness, laughter, beautiful memories, and a little bit of magic.</p>
+        <p>Keep being your wonderful self. You deserve all the good things life has to offer. 🌻</p>
+      </div>
+      <button class="back" onclick="showScreen('home')">← Back</button>
+    </section>
+  </main>
+
+  <script>
+    const notes = [
+      "promise one I am always here for you never leaving you",
+      "Your are my fav person always wanna talk to you Promise 2 never gonna make you feel unwanted",
+      "Promise 3 never gonna make you hurt bcz of me"
+    ];
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.toggle("active", screen.id === id);
+      });
+      // Stop the song when leaving the music screen.
+      if (id !== "music") {
+        const player = document.querySelector("audio");
+        if (player) player.pause();
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function showNote(index) {
+      document.getElementById("noteText").textContent = notes[index];
+    }
+  </script>
+</body>
+</html>
